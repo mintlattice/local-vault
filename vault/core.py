@@ -6,6 +6,7 @@ import json
 import os
 import secrets
 import base64
+from .storage import JsonStorage
 
 
 def _xor_bytes(data: bytes, key: bytes) -> bytes:
@@ -35,21 +36,24 @@ class Vault:
     def _vault_path(self) -> Path:
         return self.root / ".local_vault.json"
 
+    def _store(self) -> JsonStorage:
+        return JsonStorage(self._vault_path())
+
     def init(self) -> None:
         self.root.mkdir(parents=True, exist_ok=True)
         if self._vault_path().exists():
             return
         data = {"salt": base64.b64encode(self.salt).decode("ascii"), "items": {}}
-        self._vault_path().write_text(json.dumps(data, indent=2), encoding="utf-8")
+        self._store().write(data)
 
     def load(self) -> dict:
-        doc = json.loads(self._vault_path().read_text(encoding="utf-8"))
+        doc = self._store().read()
         self.salt = base64.b64decode(doc["salt"])  # refresh salt from file
         return doc
 
     def save(self, doc: dict) -> None:
         doc["salt"] = base64.b64encode(self.salt).decode("ascii")
-        self._vault_path().write_text(json.dumps(doc, indent=2), encoding="utf-8")
+        self._store().write(doc)
 
     def put(self, key: str, value: str) -> None:
         doc = self.load()
@@ -66,4 +70,3 @@ class Vault:
         cipher = base64.b64decode(b64)
         plain = _xor_bytes(cipher, self._key())
         return plain.decode("utf-8")
-
