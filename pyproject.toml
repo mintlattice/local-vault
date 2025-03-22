@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-vault"
+version = "0.1.0"
+description = "Tiny local XOR-encrypted vault CLI (toy)"
+requires-python = ">=3.9"
+authors = [{ name = "mintlattice" }]
+
+[project.scripts]
+local-vault = "cli:main"
+
