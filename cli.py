@@ -6,7 +6,7 @@ from vault.core import Vault
 
 def main() -> int:
     p = argparse.ArgumentParser("local-vault")
-    p.add_argument("command", choices=["init", "put", "get"]) 
+    p.add_argument("command", choices=["init", "put", "get", "list"]) 
     p.add_argument("key", nargs="?")
     p.add_argument("value", nargs="?")
     p.add_argument("--dir", dest="root", default=".")
@@ -32,9 +32,14 @@ def main() -> int:
         else:
             print(value)
         return 0
+    if args.command == "list":
+        v.init()
+        doc = v.load()
+        for k in sorted(doc.get("items", {}).keys()):
+            print(k)
+        return 0
     return 1
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
