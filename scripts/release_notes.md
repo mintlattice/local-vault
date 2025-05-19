@@ -1,0 +1,3 @@
+- 0.1.0 (unreleased)
+  - Initial CLI with init/put/get/list
+  - Toy XOR encryption (not for real secrets)
