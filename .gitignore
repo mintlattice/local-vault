@@ -12,3 +12,5 @@ cache
 env.local
 *.tmp
 __pycache__
+secrets/
+*.pyc
