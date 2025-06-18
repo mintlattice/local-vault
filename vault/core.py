@@ -70,3 +70,11 @@ class Vault:
         cipher = base64.b64decode(b64)
         plain = _xor_bytes(cipher, self._key())
         return plain.decode("utf-8")
+
+    def delete(self, key: str) -> bool:
+        doc = self.load()
+        if key in doc.get("items", {}):
+            del doc["items"][key]
+            self.save(doc)
+            return True
+        return False

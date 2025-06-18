@@ -6,7 +6,7 @@ from vault.core import Vault
 
 def main() -> int:
     p = argparse.ArgumentParser("local-vault")
-    p.add_argument("command", choices=["init", "put", "get", "list"]) 
+    p.add_argument("command", choices=["init", "put", "get", "list", "del"]) 
     p.add_argument("key", nargs="?")
     p.add_argument("value", nargs="?")
     p.add_argument("--dir", dest="root", default=".")
@@ -37,6 +37,14 @@ def main() -> int:
         doc = v.load()
         for k in sorted(doc.get("items", {}).keys()):
             print(k)
+        return 0
+    if args.command == "del":
+        if args.key is None:
+            p.error("del requires key")
+        ok = v.delete(args.key)
+        if not ok:
+            print("not found")
+            return 1
         return 0
     return 1
 
