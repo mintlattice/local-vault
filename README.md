@@ -11,5 +11,7 @@ Quickstart:
 - `python cli.py init --pass secret`
 - `python cli.py put api_key 123 --pass secret`
 - `python cli.py get api_key --pass secret`
+- `python cli.py list --pass secret`
+- `python cli.py del api_key --pass secret`
 
 This repo evolves in small, realistic commits.
